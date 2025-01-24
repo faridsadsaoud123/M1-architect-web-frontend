@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import { Home } from "./pages/home"
-import { Parcours } from "./pages/parcours"
+import { ParcoursPage } from "./pages/parcours"
+import { UesPage } from "./pages/ues"
 import App from "./App"
 
 const router = createBrowserRouter([
@@ -14,7 +15,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/parcours",
-        element: <Parcours />,
+        element: <ParcoursPage />,
+      },
+      {
+        path: "/ues",
+        element: <UesPage />,
       },
     ],
   },
