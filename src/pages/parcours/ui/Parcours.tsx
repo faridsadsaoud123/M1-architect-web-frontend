@@ -69,12 +69,14 @@ export const ParcoursPage: React.FC = () => {
   
 
   const handleSubmit = (parcours: PartialParcours) => {
+    // if(parcours.nomParcours===""||!parcours.nomParcours){
+    //   alert("Nom de parcours ne peut pas etre vc")
+    // }
     if (modalOpen.create) {
       handleCreate(parcours)
     } else if (modalOpen.edit) {
       handleUpdate(modalOpen.parcours?.id!, parcours)
     }
-   
   }
 
   return (

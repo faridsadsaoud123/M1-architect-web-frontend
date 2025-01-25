@@ -22,6 +22,11 @@ export const Sidebar: React.FC = () => {
             Unités d'enseignement
           </Link>
         </li>
+        <li className="p-2  hover:bg-white hover:text-blue-900">
+          <Link to="/etudiants" className="block">
+            Etudiants
+          </Link>
+        </li>
       </ul>
     </div>
   )
