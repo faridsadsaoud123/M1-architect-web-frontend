@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
-import { Modal, Input } from "../../../components";
+import { Input } from "../../../components";
 import { Ue } from "../hooks.tsx/useUesProvider";
 import { z, type ZodFormattedError } from "zod";
+import { ModalBody } from "../../../components/modalV2/ModalBody";
+import { ModalV2 } from "../../../components/modalV2/modalV2";
+import { ModalFooter } from "../../../components/modalV2/ModalFooter";
+import { ModalTitle } from "../../../components/modalV2/ModalTitle";
+
 
 export type PartialUe = Omit<Ue, "id"> | Ue;
 
@@ -69,7 +74,7 @@ export const UeModalForm: React.FC<Props> = ({
   };
 
   return (
-    <Modal
+    <ModalV2
       isOpen={isOpen}
       onClose={() => {
         setForm({ numeroUe: "1", intitule: "" });
@@ -77,54 +82,55 @@ export const UeModalForm: React.FC<Props> = ({
         onClose();
       }}
     >
-      <h2 className="text-xl font-bold mb-4">Ajouter une UE</h2>
+      <ModalTitle title="Ajouter une UE" />
       <form onSubmit={handleSubmit}>
-        {/* Champ Nom */}
-        <div className="mb-4">
-          <Input
-            id="intitule"
-            label="Nom de l'UE"
-            value={form.intitule}
-            onChange={(e) =>
-              setForm((prevForm) => ({
-                ...prevForm,
-                intitule: e.target.value,
-              }))
-            }
-          />
-          {errors?.intitule && (
-            <p className="text-red-500 text-sm">{errors.intitule._errors[0]}</p>
-          )}
-        </div>
+        <ModalBody>
+          {/* Champ Nom */}
+          <div className="mb-4">
+            <Input
+              id="intitule"
+              label="Nom de l'UE"
+              value={form.intitule}
+              onChange={(e) =>
+                setForm((prevForm) => ({
+                  ...prevForm,
+                  intitule: e.target.value,
+                }))
+              }
+            />
+            {errors?.intitule && (
+              <p className="text-red-500 text-sm">{errors.intitule._errors[0]}</p>
+            )}
+          </div>
 
-        {/* Champ Numéro */}
-        <div className="mb-4">
-          <Input
-            id="numeroUe"
-            label="Numéro de l'UE"
-            value={form.numeroUe}
-            onChange={(e) =>
-              setForm((prevForm) => ({
-                ...prevForm,
-                numeroUe: e.target.value,
-              }))
-            }
-          />
-          {errors?.numeroUe && (
-            <p className="text-red-500 text-sm">{errors.numeroUe._errors[0]}</p>
-          )}
-        </div>
+          {/* Champ Numéro */}
+          <div className="mb-4">
+            <Input
+              id="numeroUe"
+              label="Numéro de l'UE"
+              value={form.numeroUe}
+              onChange={(e) =>
+                setForm((prevForm) => ({
+                  ...prevForm,
+                  numeroUe: e.target.value,
+                }))
+              }
+            />
+            {errors?.numeroUe && (
+              <p className="text-red-500 text-sm">{errors.numeroUe._errors[0]}</p>
+            )}
+          </div>
+        </ModalBody>
 
-        {/* Bouton de soumission */}
-        <div className="flex justify-end mt-4">
+        <ModalFooter>
           <button
             type="submit"
             className="bg-blue-500 p-2 rounded-lg text-white hover:bg-blue-600"
           >
             Enregistrer
           </button>
-        </div>
+        </ModalFooter>
       </form>
-    </Modal>
+    </ModalV2>
   );
 };

@@ -1,9 +1,5 @@
-// components/modalV2/ModalTitle.tsx
-
-import { ReactNode } from "react";
-
-export const ModalTitle: React.FC<{
-  children: ReactNode;
-}> = ({ children }) => {
-  return <h2 className="text-xl font-bold mb-2">{children}</h2>;
-};
+export const ModalTitle: React.FC<{ title: string }> = ({ title }) => (
+  <div className="mb-4">
+    <h2 className="text-xl font-bold">{title}</h2>
+  </div>
+);

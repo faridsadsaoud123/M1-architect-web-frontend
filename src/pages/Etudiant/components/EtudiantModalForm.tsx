@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
-import { Modal, Input, InputSelect } from "../../../components";
 import { z, type ZodFormattedError } from "zod";
 import { Etudiant } from "../../Etudiant/hooks/useEtudiantProvider";
+import { ModalBody } from "../../../components/modalV2/ModalBody";
+import { ModalV2 } from "../../../components/modalV2/modalV2";
+import { ModalFooter } from "../../../components/modalV2/ModalFooter";
+import { ModalTitle } from "../../../components/modalV2/ModalTitle";
+import { Input } from "../../../components";
 export type PartialEtudiant = Omit<Etudiant, "id"> | Etudiant;
 
 type Props = {
@@ -20,7 +24,7 @@ export const EtudiantModalForm: React.FC<Props> = ({
   initialValue,
 }) => {
   const [form, setForm] = useState<PartialEtudiant>(
-    initialValue ?? { numEtud: "1", nom: "" ,prenom:"",email:""}
+    initialValue ?? { numEtud: "1", nom: "", prenom: "", email: "" }
   );
 
   const [errors, setErrors] = useState<ZodFormattedError<PartialEtudiant>>();
@@ -35,22 +39,23 @@ export const EtudiantModalForm: React.FC<Props> = ({
   const validateForm = (etudiant: PartialEtudiant) => {
     const schema = z.object({
       numEtud: z
-        .string().length(8,{message:"le numero etudiant doit etre compose de 8 chiffres"}),
+        .string()
+        .length(8, { message: "Le numéro étudiant doit être composé de 8 chiffres" }),
       nom: z
         .string()
-        .min(1,{message:"le nom de l'etudiant est requis"}),
-        prenom:z
+        .min(1, { message: "Le nom de l'étudiant est requis" }),
+      prenom: z
         .string()
-        .min(1,{message:"le prenom de l'etudiant est requis"}),
-        email:z
+        .min(1, { message: "Le prénom de l'étudiant est requis" }),
+      email: z
         .string()
-        .email({message:"L'adresse email est invalide"}),
+        .email({ message: "L'adresse email est invalide" }),
     });
 
-    const isValidInput = schema.safeParse(etudiant);
+    const result = schema.safeParse(etudiant);
 
-    if (!isValidInput.success) {
-      setErrors(isValidInput.error.format());
+    if (!result.success) {
+      setErrors(result.error.format());
       return false;
     } else {
       setErrors(undefined);
@@ -66,109 +71,108 @@ export const EtudiantModalForm: React.FC<Props> = ({
         id,
         numEtud: form.numEtud,
         nom: form.nom,
-        prenom:form.prenom,
-        email:form.email,
+        prenom: form.prenom,
+        email: form.email,
       });
+      onClose(); // Fermer le modal après soumission
     }
   };
 
-  return (
-    <Modal
-      isOpen={isOpen}
-      onClose={() => {
-        setForm({ numEtud: "1", nom: "",prenom:"",email:"" });
-        onClose();
-      }}
-    >
-      <h2 className="text-xl font-bold mb-4">Ajouter un etudiant</h2>
-      <form onSubmit={handleSubmit}>
-        {/* Champ numEtud */}
-        <div className="mb-4">
-          <Input
-            id="numEtud"
-            label="Numéro de l'etudiant"
-            value={form.numEtud}
-            onChange={(e) => {
-              setForm((prevForm) => ({
-                ...prevForm,
-                numEtud: e.target.value,
-              }));
-            }}
-          />
-          {errors?.numEtud && (
-            <p className="text-red-500 text-sm">
-              {errors.numEtud._errors[0]}
-            </p>
-          )}
-        </div>
-        {/* Champ Nom */}
-        <div className="mb-4">
-          <Input
-            id="name"
-            label="Nom"
-            value={form.nom}
-            onChange={(e) => {
-              setForm((prevForm) => ({
-                ...prevForm,
-                nom: e.target.value,
-              }));
-            }}
-          />
-          {errors?.nom && (
-            <p className="text-red-500 text-sm">
-              {errors.nom._errors[0]}
-            </p>
-          )}
-        </div>
- {/* Champ prenom */}
-        <div className="mb-4">
-          <Input
-            id="prenom"
-            label="Prenom"
-            value={form.prenom}
-            onChange={(e) => {
-              setForm((prevForm) => ({
-                ...prevForm,
-                prenom: e.target.value,
-              }));
-            }}
-          />
-          {errors?.prenom && (
-            <p className="text-red-500 text-sm">
-              {errors.prenom._errors[0]}
-            </p>
-          )}
-        </div>
-        {/* Champ email */}
-        <div className="mb-4">
-          <Input
-            id="email"
-            label="Email"
-            value={form.email}
-            onChange={(e) => {
-              setForm((prevForm) => ({
-                ...prevForm,
-                email: e.target.value,
-              }));
-            }}
-          />
-          {errors?.email && (
-            <p className="text-red-500 text-sm">
-              {errors.email._errors[0]}
-            </p>
-          )}
-        </div>
+  const handleClose = () => {
+    setForm({ numEtud: "1", nom: "", prenom: "", email: "" });
+    setErrors(undefined);
+    onClose();
+  };
 
-        {/* Bouton de soumission */}
-        <div className="flex justify-end mt-4">
-          <button
-            type="submit"
-            className="bg-blue-500 p-2 rounded-lg text-white hover:bg-blue-600"
-          >
-            Enregistrer
-          </button>
-        </div>
-      </form>
-    </Modal>
+  return (
+    <ModalV2 isOpen={isOpen} onClose={handleClose}>
+      <ModalTitle title="Ajouter un etudiant" />
+
+
+      <ModalBody>
+        <form onSubmit={handleSubmit}>
+          {/* Champ Numéro Étudiant */}
+          <div className="mb-4">
+            <Input
+              id="numEtud"
+              label="Numéro de l'étudiant"
+              value={form.numEtud}
+              onChange={(e) =>
+                setForm((prevForm) => ({
+                  ...prevForm,
+                  numEtud: e.target.value,
+                }))
+              }
+            />
+            {errors?.numEtud && (
+              <p className="text-red-500 text-sm">{errors.numEtud._errors[0]}</p>
+            )}
+          </div>
+
+          {/* Champ Nom */}
+          <div className="mb-4">
+            <Input
+              id="nom"
+              label="Nom"
+              value={form.nom}
+              onChange={(e) =>
+                setForm((prevForm) => ({
+                  ...prevForm,
+                  nom: e.target.value,
+                }))
+              }
+            />
+            {errors?.nom && (
+              <p className="text-red-500 text-sm">{errors.nom._errors[0]}</p>
+            )}
+          </div>
+
+          {/* Champ Prénom */}
+          <div className="mb-4">
+            <Input
+              id="prenom"
+              label="Prénom"
+              value={form.prenom}
+              onChange={(e) =>
+                setForm((prevForm) => ({
+                  ...prevForm,
+                  prenom: e.target.value,
+                }))
+              }
+            />
+            {errors?.prenom && (
+              <p className="text-red-500 text-sm">{errors.prenom._errors[0]}</p>
+            )}
+          </div>
+
+          {/* Champ Email */}
+          <div className="mb-4">
+            <Input
+              id="email"
+              label="Email"
+              value={form.email}
+              onChange={(e) =>
+                setForm((prevForm) => ({
+                  ...prevForm,
+                  email: e.target.value,
+                }))
+              }
+            />
+            {errors?.email && (
+              <p className="text-red-500 text-sm">{errors.email._errors[0]}</p>
+            )}
+          </div>
+        </form>
+      </ModalBody>
+      <ModalFooter>
+        <button
+          type="submit"
+          onClick={handleSubmit}
+          className="bg-blue-500 p-2 rounded-lg text-white hover:bg-blue-600"
+        >
+          Enregistrer
+        </button>
+      </ModalFooter>
+    </ModalV2>
   );
 };

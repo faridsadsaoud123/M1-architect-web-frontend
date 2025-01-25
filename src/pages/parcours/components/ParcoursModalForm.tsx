@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
-import { Modal, Input, InputSelect } from "../../../components";
+import { Input, InputSelect } from "../../../components";
 import { Parcours } from "../hooks/useParcoursProvider";
 import { z, type ZodFormattedError } from "zod";
+import { ModalBody } from "../../../components/modalV2/ModalBody";
+import { ModalV2 } from "../../../components/modalV2/modalV2";
+import { ModalFooter } from "../../../components/modalV2/ModalFooter";
+import { ModalTitle } from "../../../components/modalV2/ModalTitle";
 
 export type PartialParcours = Omit<Parcours, "id"> | Parcours;
 
@@ -23,7 +27,6 @@ export const ParcoursModalForm: React.FC<Props> = ({
   const [form, setForm] = useState<PartialParcours>(
     initialValue ?? { anneeFormation: 1, nomParcours: "" }
   );
-
   const [errors, setErrors] = useState<ZodFormattedError<PartialParcours>>();
 
   useEffect(() => {
@@ -69,69 +72,69 @@ export const ParcoursModalForm: React.FC<Props> = ({
   };
 
   return (
-    <Modal
+    <ModalV2
       isOpen={isOpen}
       onClose={() => {
         setForm({ anneeFormation: 1, nomParcours: "" });
         onClose();
       }}
     >
-      <h2 className="text-xl font-bold mb-4">Ajouter un parcours</h2>
+      <ModalTitle title="Ajouter un parcours" />
       <form onSubmit={handleSubmit}>
-        {/* Champ Nom */}
-        <div className="mb-4">
-          <Input
-            id="name"
-            label="Nom du parcours"
-            value={form.nomParcours}
-            onChange={(e) => {
-              setForm((prevForm) => ({
-                ...prevForm,
-                nomParcours: e.target.value,
-              }));
-            }}
-          />
-          {errors?.nomParcours && (
-            <p className="text-red-500 text-sm">
-              {errors.nomParcours._errors[0]}
-            </p>
-          )}
-        </div>
+        <ModalBody>
+          {/* Champ Nom */}
+          <div className="mb-4">
+            <Input
+              id="name"
+              label="Nom du parcours"
+              value={form.nomParcours}
+              onChange={(e) => {
+                setForm((prevForm) => ({
+                  ...prevForm,
+                  nomParcours: e.target.value,
+                }));
+              }}
+            />
+            {errors?.nomParcours && (
+              <p className="text-red-500 text-sm">
+                {errors.nomParcours._errors[0]}
+              </p>
+            )}
+          </div>
 
-        {/* Champ Année */}
-        <div className="mb-4">
-          <InputSelect
-            id="year"
-            label="Année"
-            options={[
-              { value: "1", label: "1ère année" },
-              { value: "2", label: "2ème année" },
-            ]}
-            value={form.anneeFormation}
-            onChange={(value) =>
-              setForm((prevForm) => ({
-                ...prevForm,
-                anneeFormation: parseInt(value),
-              }))
-            }
-          />
-          {errors?.anneeFormation && (
-            <p className="text-red-500 text-sm">
-              {errors.anneeFormation._errors[0]}
-            </p>
-          )}
-        </div>
-
-        {/* Bouton de soumission */}
-        <div className="flex justify-end mt-4">
+          {/* Champ Année */}
+          <div className="mb-4">
+            <InputSelect
+              id="year"
+              label="Année"
+              options={[
+                { value: "1", label: "1ère année" },
+                { value: "2", label: "2ème année" },
+              ]}
+              value={form.anneeFormation}
+              onChange={(value) =>
+                setForm((prevForm) => ({
+                  ...prevForm,
+                  anneeFormation: parseInt(value),
+                }))
+              }
+            />
+            {errors?.anneeFormation && (
+              <p className="text-red-500 text-sm">
+                {errors.anneeFormation._errors[0]}
+              </p>
+            )}
+          </div>
+        </ModalBody>
+        <ModalFooter>
           <button
             type="submit"
             className="bg-blue-500 p-2 rounded-lg text-white hover:bg-blue-600"
           >
             Enregistrer
           </button>
-        </div>
+        </ModalFooter>
       </form>
-    </Modal>
+    </ModalV2>
   );
 };
