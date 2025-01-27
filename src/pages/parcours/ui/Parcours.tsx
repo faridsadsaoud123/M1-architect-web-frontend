@@ -82,10 +82,11 @@ export const ParcoursPage: React.FC = () => {
   return (
     <>
       <div className="space-y-4">
-        <div className="flex justify-end">
+        <div className="flex justify-between">
+        <div className=" text-2xl border-b-2">Liste des parcours</div>
           <button
             onClick={() => setModalOpen({ create: true })}
-            className="bg-blue-900 p-2 rounded-lg text-white hover:bg-orange-500"
+            className="bg-blue-900 px-5 py-2 rounded-lg text-white hover:bg-orange-500"
           >
             Ajouter un parcours
           </button>
@@ -101,10 +102,10 @@ export const ParcoursPage: React.FC = () => {
               render: (parcours) => (
                 <span>
                   <button  onClick={() => setModalOpen({ edit: true, parcours })}>
-                  <Edit />
+                  <Edit color="green"/>
                 </button>
                 <button onClick={() => handleDelete(parcours.id)}>
-                  <Trash/>
+                  <Trash color="red"/>
                 </button>
                 </span>
               ),

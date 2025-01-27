@@ -72,7 +72,9 @@ export const UeModalForm: React.FC<Props> = ({
       onClose(); // Fermer le modal après une validation réussie
     }
   };
-
+  const handleClose = () => {
+    onClose();
+  };
   return (
     <ModalV2
       isOpen={isOpen}
@@ -123,6 +125,10 @@ export const UeModalForm: React.FC<Props> = ({
         </ModalBody>
 
         <ModalFooter>
+        <button className="bg-red-500 px-5 rounded-lg text-white hover:bg-red-600"
+      onClick={handleClose}>
+            Annuler
+        </button>
           <button
             type="submit"
             className="bg-blue-500 p-2 rounded-lg text-white hover:bg-blue-600"

@@ -23,12 +23,12 @@ export const Table = <T extends Record<string, any>>({
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
+        <thead className="bg-gray-200">
           <tr>
             {columns.map((column) => (
               <th
                 key={String(column.key)}
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase "
               >
                 {column.label}
               </th>
@@ -39,7 +39,7 @@ export const Table = <T extends Record<string, any>>({
           {data?.map((row, rowIndex) => (
             <tr
               key={rowIndex}
-              className="hover:bg-gray-100 cursor-pointer"
+              className="bg-gray-50 hover:bg-gray-100 cursor-pointer"
               onClick={() => onRowClick && onRowClick(row)}
             >
               {columns.map((column) => (

@@ -1,4 +1,4 @@
-import { Edit,Trash } from "lucide-react"
+import { Edit, Trash } from "lucide-react"
 import { useState } from "react"
 import { Table } from "../../../components/Table"
 import {
@@ -6,10 +6,12 @@ import {
   useCreateEtudiant,
   useListEtudiant,
   useUpdateEtudiant,
-  useDeleteEtudiant
+  useDeleteEtudiant,
 } from "../hooks/useEtudiantProvider"
-import { EtudiantModalForm,PartialEtudiant } from "../components/EtudiantModalForm"
-
+import {
+  EtudiantModalForm,
+  PartialEtudiant,
+} from "../components/EtudiantModalForm"
 
 export const EtudiantPage: React.FC = () => {
   const [modalOpen, setModalOpen] = useState<{
@@ -18,12 +20,12 @@ export const EtudiantPage: React.FC = () => {
     etudiant?: Etudiant
   }>({
     create: false,
-    edit: false
+    edit: false,
   })
 
   const { mutate: createEtudiant } = useCreateEtudiant()
   const { mutate: updateEtudiant } = useUpdateEtudiant()
-  const {mutate:deleteEtudiant} = useDeleteEtudiant()
+  const { mutate: deleteEtudiant } = useDeleteEtudiant()
   const { data } = useListEtudiant()
 
   const handleCreate = (etudiant: PartialEtudiant) => {
@@ -31,8 +33,8 @@ export const EtudiantPage: React.FC = () => {
       {
         numEtud: etudiant.numEtud,
         nom: etudiant.nom,
-        prenom:etudiant.prenom,
-        email:etudiant.email,
+        prenom: etudiant.prenom,
+        email: etudiant.email,
       },
       {
         onSuccess: () => {
@@ -48,8 +50,8 @@ export const EtudiantPage: React.FC = () => {
         id,
         numEtud: etudiant.numEtud,
         nom: etudiant.nom,
-        prenom:etudiant.prenom,
-        email:etudiant.email
+        prenom: etudiant.prenom,
+        email: etudiant.email,
       },
       {
         onSuccess: () => {
@@ -59,8 +61,7 @@ export const EtudiantPage: React.FC = () => {
     )
   }
   const handleDelete = (id: string) => {
-    if(confirm("Etes-vous sur de supprimer l'etudiant")){
-
+    if (confirm("Etes-vous sur de supprimer l'etudiant")) {
       deleteEtudiant(
         { id },
         {
@@ -71,7 +72,6 @@ export const EtudiantPage: React.FC = () => {
       )
     }
   }
-  
 
   const handleSubmit = (etudiant: PartialEtudiant) => {
     if (modalOpen.create) {
@@ -79,16 +79,16 @@ export const EtudiantPage: React.FC = () => {
     } else if (modalOpen.edit) {
       handleUpdate(modalOpen.etudiant?.id!, etudiant)
     }
-   
   }
 
   return (
     <>
       <div className="space-y-4">
-        <div className="flex justify-end">
+        <div className="flex justify-between">
+          <div className=" text-2xl border-b-2">Liste des étudiants</div>
           <button
             onClick={() => setModalOpen({ create: true })}
-            className="bg-blue-900 p-2 rounded-lg text-white hover:bg-orange-500"
+            className="bg-blue-900 px-5 py-2 rounded-lg text-white hover:bg-orange-500"
           >
             Ajouter un etudiant
           </button>
@@ -98,19 +98,21 @@ export const EtudiantPage: React.FC = () => {
           columns={[
             { key: "numEtud", label: "Numéro d'etudiant" },
             { key: "nom", label: "Nom" },
-            {key:"prenom",label:"Prenom"},
-            {key:"email",label:"Email"},
+            { key: "prenom", label: "Prenom" },
+            { key: "email", label: "Email" },
             {
               key: "actions",
               label: "Actions",
               render: (etudiant) => (
                 <span>
-                  <button  onClick={() => setModalOpen({ edit: true, etudiant })}>
-                  <Edit />
-                </button>
-                <button onClick={() => handleDelete(etudiant.id)}>
-                  <Trash/>
-                </button>
+                  <button
+                    onClick={() => setModalOpen({ edit: true, etudiant })}
+                  >
+                    <Edit color="green" />
+                  </button>
+                  <button onClick={() => handleDelete(etudiant.id)}>
+                    <Trash color="red" />
+                  </button>
                 </span>
               ),
             },

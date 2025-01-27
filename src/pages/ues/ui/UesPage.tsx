@@ -79,10 +79,11 @@ export const UesPage: React.FC = () => {
   return (
     <>
       <div className="space-y-4">
-        <div className="flex justify-end">
+        <div className="flex justify-between">
+        <div className=" text-2xl border-b-2">Liste des UEs</div>
           <button
             onClick={() => setModalOpen({ create: true })}
-            className="bg-blue-900 p-2 rounded-lg text-white"
+            className="bg-blue-900 px-5 py-2 rounded-lg text-white hover:bg-orange-500"
           >
             Ajouter une ue
           </button>
@@ -98,10 +99,10 @@ export const UesPage: React.FC = () => {
               render: (ue) => (
                 <span>
                   <button onClick={() => setModalOpen({ edit: true, ue })}>
-                  <Edit />
+                  <Edit color="green"/>
                 </button>
                 <button onClick={() => handleDelete(ue.id)}>
-                  <Trash/>
+                  <Trash color="red"/>
                 </button>
                 </span>
               ),
