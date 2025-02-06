@@ -1,14 +1,10 @@
-import { Input } from "../../../components"
-//const API_URL = import.meta.env.VITE_API_URL
-
-import { useMutation,useQuery, useQueryClient } from "@tanstack/react-query"
-
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 export type Etudiant = {
   id: string
   numEtud: string
   nom: string
-  prenom:string
-  email:string
+  prenom: string
+  email: string
 }
 
 const LOCAL_STORAGE_KEY = "etudiantsData"
@@ -28,23 +24,23 @@ if (!localStorage.getItem(LOCAL_STORAGE_KEY)) {
       id: "1",
       numEtud: "122235",
       nom: "farid",
-      prenom:"sad",
-      email:"fsadfar@gmail.com"
+      prenom: "sad",
+      email: "fsadfar@gmail.com",
     },
     {
-        id: "2",
-        numEtud: "122236",
-        nom: "john",
-        prenom:"john",
-        email:"john@gmail.com"
-      },
+      id: "2",
+      numEtud: "122236",
+      nom: "john",
+      prenom: "john",
+      email: "john@gmail.com",
+    },
     {
-        id: "3",
-        numEtud: "122237",
-        nom: "lucas",
-        prenom:"lucas",
-        email:"lucas@gmail.com"
-      },
+      id: "3",
+      numEtud: "122237",
+      nom: "lucas",
+      prenom: "lucas",
+      email: "lucas@gmail.com",
+    },
   ])
 }
 
@@ -52,24 +48,24 @@ export const useCreateEtudiant = () => {
   type Input = {
     numEtud: string
     nom: string
-    prenom:string
-    email:string
+    prenom: string
+    email: string
   }
 
   const queryClient = useQueryClient()
 
-  const createEtudiant= async ({
+  const createEtudiant = async ({
     numEtud,
     nom,
     prenom,
-    email
+    email,
   }: Input): Promise<Etudiant> => {
     const newEtudiant: Etudiant = {
       id: Date.now().toString(),
       numEtud,
       nom,
       prenom,
-      email
+      email,
     }
 
     return newEtudiant
@@ -116,8 +112,8 @@ export const useUpdateEtudiant = () => {
     id: string
     numEtud?: string
     nom: string
-    prenom:string
-    email:string
+    prenom: string
+    email: string
   }
 
   const queryClient = useQueryClient()
@@ -127,7 +123,7 @@ export const useUpdateEtudiant = () => {
     numEtud,
     nom,
     prenom,
-    email
+    email,
   }: Input): Promise<Etudiant> => {
     const currentData = getEtudiantFromLocalStorage()
     const updatedData = currentData.map((etudiant) =>
@@ -135,9 +131,9 @@ export const useUpdateEtudiant = () => {
         ? {
             ...etudiant,
             numEtud: numEtud || etudiant.numEtud,
-            nom:nom||etudiant.nom,
-            prenom:prenom||etudiant.prenom,
-            email:email||etudiant.email
+            nom: nom || etudiant.nom,
+            prenom: prenom || etudiant.prenom,
+            email: email || etudiant.email,
           }
         : etudiant
     )

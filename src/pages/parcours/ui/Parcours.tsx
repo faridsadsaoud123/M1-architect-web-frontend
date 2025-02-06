@@ -1,4 +1,4 @@
-import { Edit,Trash } from "lucide-react"
+import { Edit, Trash } from "lucide-react"
 import { useState } from "react"
 import { Table } from "../../../components/Table"
 import {
@@ -6,9 +6,12 @@ import {
   useCreateParcours,
   useListParcours,
   useUpdateParcours,
-  useDeleteParcours
+  useDeleteParcours,
 } from "../hooks/useParcoursProvider"
-import { ParcoursModalForm,PartialParcours } from "../components/ParcoursModalForm"
+import {
+  ParcoursModalForm,
+  PartialParcours,
+} from "../components/ParcoursModalForm"
 
 export const ParcoursPage: React.FC = () => {
   const [modalOpen, setModalOpen] = useState<{
@@ -17,12 +20,12 @@ export const ParcoursPage: React.FC = () => {
     parcours?: Parcours
   }>({
     create: false,
-    edit: false
+    edit: false,
   })
 
   const { mutate: createParcours } = useCreateParcours()
   const { mutate: updateParcours } = useUpdateParcours()
-  const {mutate:deleteParcours} = useDeleteParcours()
+  const { mutate: deleteParcours } = useDeleteParcours()
   const { data } = useListParcours()
 
   const handleCreate = (parcours: PartialParcours) => {
@@ -54,8 +57,7 @@ export const ParcoursPage: React.FC = () => {
     )
   }
   const handleDelete = (id: string) => {
-    if(confirm("Etes-vous sur de supprimer le parcours")){
-
+    if (confirm("Etes-vous sur de supprimer le parcours ?")) {
       deleteParcours(
         { id },
         {
@@ -66,7 +68,6 @@ export const ParcoursPage: React.FC = () => {
       )
     }
   }
-  
 
   const handleSubmit = (parcours: PartialParcours) => {
     // if(parcours.nomParcours===""||!parcours.nomParcours){
@@ -83,7 +84,7 @@ export const ParcoursPage: React.FC = () => {
     <>
       <div className="space-y-4">
         <div className="flex justify-between">
-        <div className=" text-2xl border-b-2">Liste des parcours</div>
+          <div className=" text-2xl border-b-2">Liste des parcours</div>
           <button
             onClick={() => setModalOpen({ create: true })}
             className="bg-blue-900 px-5 py-2 rounded-lg text-white hover:bg-orange-500"
@@ -101,12 +102,14 @@ export const ParcoursPage: React.FC = () => {
               label: "Actions",
               render: (parcours) => (
                 <span>
-                  <button  onClick={() => setModalOpen({ edit: true, parcours })}>
-                  <Edit color="green"/>
-                </button>
-                <button onClick={() => handleDelete(parcours.id)}>
-                  <Trash color="red"/>
-                </button>
+                  <button
+                    onClick={() => setModalOpen({ edit: true, parcours })}
+                  >
+                    <Edit color="green" />
+                  </button>
+                  <button onClick={() => handleDelete(parcours.id)}>
+                    <Trash color="red" />
+                  </button>
                 </span>
               ),
             },
