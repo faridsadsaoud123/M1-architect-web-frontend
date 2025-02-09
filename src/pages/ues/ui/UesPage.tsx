@@ -1,5 +1,6 @@
 import { Edit, Trash } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
 import { Table } from "../../../components/Table"
 import {
   type Ue,
@@ -15,17 +16,34 @@ export const UesPage: React.FC = () => {
     create?: boolean
     edit?: boolean
     ue?: Ue
-    delete?: boolean
   }>({
     create: false,
     edit: false,
-    delete: false,
   })
+
+  const location = useLocation()
+  const navigate = useNavigate()
 
   const { mutate: createUe } = useCreateUe()
   const { mutate: updateUe } = useUpdateUes()
   const { mutate: deleteUe } = useDeleteUes()
   const { data } = useListUes()
+
+  useEffect(() => {
+    const state = location.state as {
+      openCreateModal?: boolean
+      openEditModal?: boolean
+      ueId?: string
+    }
+    if (state?.openCreateModal) {
+      setModalOpen({ create: true })
+    } else if (state?.openEditModal && state.ueId) {
+      const ue = data?.find((u) => u.id === state.ueId)
+      if (ue) {
+        setModalOpen({ edit: true, ue })
+      }
+    }
+  }, [location.state, data])
 
   const handleCreate = (ue: PartialUe) => {
     createUe(
@@ -36,6 +54,7 @@ export const UesPage: React.FC = () => {
       {
         onSuccess: () => {
           setModalOpen({})
+          navigate("/ues", { state: {} }) // Réinitialiser l'état de navigation
         },
       }
     )
@@ -51,12 +70,14 @@ export const UesPage: React.FC = () => {
       {
         onSuccess: () => {
           setModalOpen({})
+          navigate("/ues", { state: {} }) // Réinitialiser l'état de navigation
         },
       }
     )
   }
+
   const handleDelete = (id: string) => {
-    if (confirm("Etes-vous sur de supprimer")) {
+    if (confirm("Êtes-vous sûr de supprimer ?")) {
       deleteUe(
         { id },
         {
@@ -80,19 +101,19 @@ export const UesPage: React.FC = () => {
     <>
       <div className="space-y-4">
         <div className="flex justify-between">
-          <div className=" text-2xl border-b-2">Liste des UEs</div>
+          <div className="text-2xl border-b-2">Liste des UEs</div>
           <button
             onClick={() => setModalOpen({ create: true })}
             className="bg-blue-900 px-5 py-2 rounded-lg text-white hover:bg-orange-500"
           >
-            Ajouter une ue
+            Ajouter une UE
           </button>
         </div>
         <Table
           data={data}
           columns={[
-            { key: "intitule", label: "Intitule" },
-            { key: "numeroUe", label: "Numero Ue" },
+            { key: "intitule", label: "Intitulé" },
+            { key: "numeroUe", label: "Numéro UE" },
             {
               key: "actions",
               label: "Actions",
@@ -113,7 +134,10 @@ export const UesPage: React.FC = () => {
       <UeModalForm
         id={modalOpen.ue?.id}
         isOpen={modalOpen.edit ?? modalOpen.create ?? false}
-        onClose={() => setModalOpen({})}
+        onClose={() => {
+          setModalOpen({})
+          navigate("/ues", { state: {} }) // Réinitialiser l'état de navigation
+        }}
         onSubmit={handleSubmit}
         initialValue={modalOpen.ue}
       />

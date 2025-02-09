@@ -1,5 +1,6 @@
 import { Edit, Trash } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
 import { Table } from "../../../components/Table"
 import {
   type Parcours,
@@ -23,10 +24,30 @@ export const ParcoursPage: React.FC = () => {
     edit: false,
   })
 
+  const location = useLocation()
+  const navigate = useNavigate()
+
   const { mutate: createParcours } = useCreateParcours()
   const { mutate: updateParcours } = useUpdateParcours()
   const { mutate: deleteParcours } = useDeleteParcours()
   const { data } = useListParcours()
+
+  // Gestion de l'ouverture des modaux via l'état de navigation
+  useEffect(() => {
+    const state = location.state as {
+      openCreateModal?: boolean
+      openEditModal?: boolean
+      parcoursId?: string
+    }
+    if (state?.openCreateModal) {
+      setModalOpen({ create: true })
+    } else if (state?.openEditModal && state.parcoursId) {
+      const parcours = data?.find((p) => p.id === state.parcoursId)
+      if (parcours) {
+        setModalOpen({ edit: true, parcours })
+      }
+    }
+  }, [location.state, data])
 
   const handleCreate = (parcours: PartialParcours) => {
     createParcours(
@@ -37,6 +58,7 @@ export const ParcoursPage: React.FC = () => {
       {
         onSuccess: () => {
           setModalOpen({})
+          navigate("/parcours", { state: {} }) // Réinitialiser l'état de navigation
         },
       }
     )
@@ -52,12 +74,14 @@ export const ParcoursPage: React.FC = () => {
       {
         onSuccess: () => {
           setModalOpen({})
+          navigate("/parcours", { state: {} }) // Réinitialiser l'état de navigation
         },
       }
     )
   }
+
   const handleDelete = (id: string) => {
-    if (confirm("Etes-vous sur de supprimer le parcours ?")) {
+    if (confirm("Êtes-vous sûr de supprimer le parcours ?")) {
       deleteParcours(
         { id },
         {
@@ -70,9 +94,6 @@ export const ParcoursPage: React.FC = () => {
   }
 
   const handleSubmit = (parcours: PartialParcours) => {
-    // if(parcours.nomParcours===""||!parcours.nomParcours){
-    //   alert("Nom de parcours ne peut pas etre vc")
-    // }
     if (modalOpen.create) {
       handleCreate(parcours)
     } else if (modalOpen.edit) {
@@ -84,7 +105,7 @@ export const ParcoursPage: React.FC = () => {
     <>
       <div className="space-y-4">
         <div className="flex justify-between">
-          <div className=" text-2xl border-b-2">Liste des parcours</div>
+          <div className="text-2xl border-b-2">Liste des parcours</div>
           <button
             onClick={() => setModalOpen({ create: true })}
             className="bg-blue-900 px-5 py-2 rounded-lg text-white hover:bg-orange-500"
@@ -119,7 +140,10 @@ export const ParcoursPage: React.FC = () => {
       <ParcoursModalForm
         id={modalOpen.parcours?.id}
         isOpen={modalOpen.edit ?? modalOpen.create ?? false}
-        onClose={() => setModalOpen({})}
+        onClose={() => {
+          setModalOpen({})
+          navigate("/parcours", { state: {} }) // Réinitialiser l'état de navigation
+        }}
         onSubmit={handleSubmit}
         initialValue={modalOpen.parcours}
       />

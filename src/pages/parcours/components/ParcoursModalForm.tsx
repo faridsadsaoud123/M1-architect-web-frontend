@@ -1,21 +1,21 @@
-import { useEffect, useState } from "react";
-import { Input, InputSelect } from "../../../components";
-import { Parcours } from "../hooks/useParcoursProvider";
-import { z, type ZodFormattedError } from "zod";
-import { ModalBody } from "../../../components/modalV2/ModalBody";
-import { ModalV2 } from "../../../components/modalV2/modalV2";
-import { ModalFooter } from "../../../components/modalV2/ModalFooter";
-import { ModalTitle } from "../../../components/modalV2/ModalTitle";
+import { useEffect, useState } from "react"
+import { Input, InputSelect } from "../../../components"
+import { Parcours } from "../hooks/useParcoursProvider"
+import { z, type ZodFormattedError } from "zod"
+import { ModalBody } from "../../../components/modalV2/ModalBody"
+import { ModalV2 } from "../../../components/modalV2/modalV2"
+import { ModalFooter } from "../../../components/modalV2/ModalFooter"
+import { ModalTitle } from "../../../components/modalV2/ModalTitle"
 
-export type PartialParcours = Omit<Parcours, "id"> | Parcours;
+export type PartialParcours = Omit<Parcours, "id"> | Parcours
 
 type Props = {
-  isOpen: boolean;
-  onSubmit: (parcours: PartialParcours) => void;
-  onClose: () => void;
-  id?: string;
-  initialValue?: PartialParcours;
-};
+  isOpen: boolean
+  onSubmit: (parcours: PartialParcours) => void
+  onClose: () => void
+  id?: string
+  initialValue?: PartialParcours
+}
 
 export const ParcoursModalForm: React.FC<Props> = ({
   isOpen,
@@ -26,14 +26,14 @@ export const ParcoursModalForm: React.FC<Props> = ({
 }) => {
   const [form, setForm] = useState<PartialParcours>(
     initialValue ?? { anneeFormation: 1, nomParcours: "" }
-  );
-  const [errors, setErrors] = useState<ZodFormattedError<PartialParcours>>();
+  )
+  const [errors, setErrors] = useState<ZodFormattedError<PartialParcours>>()
 
   useEffect(() => {
     if (initialValue) {
-      setForm(initialValue);
+      setForm(initialValue)
     }
-  }, [initialValue]);
+  }, [initialValue])
 
   // Fonction de validation avec Zod
   const validateForm = (parcours: PartialParcours) => {
@@ -46,40 +46,41 @@ export const ParcoursModalForm: React.FC<Props> = ({
         .int({ message: "L'année de formation doit être un nombre entier" })
         .min(1, { message: "L'année de formation doit être au moins 1" })
         .max(2, { message: "L'année de formation doit être au maximum 2" }),
-    });
+    })
 
-    const isValidInput = schema.safeParse(parcours);
+    const isValidInput = schema.safeParse(parcours)
 
     if (!isValidInput.success) {
-      setErrors(isValidInput.error.format());
-      return false;
+      setErrors(isValidInput.error.format())
+      return false
     } else {
-      setErrors(undefined);
-      return true;
+      setErrors(undefined)
+      return true
     }
-  };
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
 
     if (validateForm(form)) {
       onSubmit({
         id,
         nomParcours: form.nomParcours,
         anneeFormation: form.anneeFormation,
-      });
+      })
     }
-  };
+  }
 
   const handleClose = () => {
-    onClose();
-  };
+    onClose()
+  }
   return (
     <ModalV2
       isOpen={isOpen}
       onClose={() => {
-        setForm({ anneeFormation: 1, nomParcours: "" });
-        onClose();
+        setForm({ anneeFormation: 1, nomParcours: "" })
+        onClose()
+        window.history.replaceState({}, document.title)
       }}
     >
       <ModalTitle title="Ajouter un parcours" />
@@ -95,7 +96,7 @@ export const ParcoursModalForm: React.FC<Props> = ({
                 setForm((prevForm) => ({
                   ...prevForm,
                   nomParcours: e.target.value,
-                }));
+                }))
               }}
             />
             {errors?.nomParcours && (
@@ -130,10 +131,12 @@ export const ParcoursModalForm: React.FC<Props> = ({
           </div>
         </ModalBody>
         <ModalFooter>
-        <button className="bg-red-500 px-5 rounded-lg text-white hover:bg-red-600"
-      onClick={handleClose}>
+          <button
+            className="bg-red-500 px-5 rounded-lg text-white hover:bg-red-600"
+            onClick={handleClose}
+          >
             Annuler
-        </button>
+          </button>
           <button
             type="submit"
             className="bg-blue-500 p-2 rounded-lg text-white hover:bg-blue-600"
@@ -143,5 +146,5 @@ export const ParcoursModalForm: React.FC<Props> = ({
         </ModalFooter>
       </form>
     </ModalV2>
-  );
-};
+  )
+}
