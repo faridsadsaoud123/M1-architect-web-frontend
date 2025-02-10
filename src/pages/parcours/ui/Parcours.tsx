@@ -13,7 +13,7 @@ import {
   ParcoursModalForm,
   PartialParcours,
 } from "../components/ParcoursModalForm"
-
+import QuickSearch from "../../../components/QuickSearch"
 export const ParcoursPage: React.FC = () => {
   const [modalOpen, setModalOpen] = useState<{
     create?: boolean
@@ -33,6 +33,24 @@ export const ParcoursPage: React.FC = () => {
   const { data } = useListParcours()
 
   // Gestion de l'ouverture des modaux via l'état de navigation
+  const handleSearch = (query: string) => {
+    console.log("Recherche:", query)
+  }
+
+  const handleSelect = (action: string) => {
+    switch (action) {
+      case "go-to-parcours-list":
+        navigate("/parcours")
+        break
+      case "go-to-ues":
+        navigate("/ues")
+        break
+      case "go-to-etudiants":
+        navigate("/etudiants")
+      default:
+        break
+    }
+  }
   useEffect(() => {
     const state = location.state as {
       openCreateModal?: boolean
@@ -103,6 +121,7 @@ export const ParcoursPage: React.FC = () => {
 
   return (
     <>
+      <QuickSearch onSearch={handleSearch} onSelect={handleSelect} />
       <div className="space-y-4">
         <div className="flex justify-between">
           <div className="text-2xl border-b-2">Liste des parcours</div>

@@ -53,7 +53,7 @@ const QuickSearch: React.FC<QuickSearchBarProps> = ({ onSearch, onSelect }) => {
     } else if (actionId.startsWith("edit-parcours-")) {
       const parcoursId = actionId.replace("edit-parcours-", "")
       navigate("/parcours", { state: { openEditModal: true, parcoursId } })
-    } else if (actionId === "create-ue") {
+    } else if (actionId === "create-ues") {
       navigate("/ues", { state: { openCreateModal: true } })
     } else if (actionId.startsWith("edit-ue-")) {
       const ueId = actionId.replace("edit-ue-", "")

@@ -13,7 +13,7 @@ import {
   EtudiantModalForm,
   PartialEtudiant,
 } from "../components/EtudiantModalForm"
-
+import QuickSearch from "../../../components/QuickSearch"
 export const EtudiantPage: React.FC = () => {
   const [modalOpen, setModalOpen] = useState<{
     create?: boolean
@@ -47,7 +47,24 @@ export const EtudiantPage: React.FC = () => {
       }
     }
   }, [location.state, data])
+  const handleSearch = (query: string) => {
+    console.log("Recherche:", query)
+  }
 
+  const handleSelect = (action: string) => {
+    switch (action) {
+      case "go-to-parcours-list":
+        navigate("/parcours")
+        break
+      case "go-to-ues":
+        navigate("/ues")
+        break
+      case "go-to-etudiants":
+        navigate("/etudiants")
+      default:
+        break
+    }
+  }
   const handleCreate = (etudiant: PartialEtudiant) => {
     createEtudiant(
       {
@@ -106,6 +123,7 @@ export const EtudiantPage: React.FC = () => {
 
   return (
     <>
+      <QuickSearch onSearch={handleSearch} onSelect={handleSelect} />{" "}
       <div className="space-y-4">
         <div className="flex justify-between">
           <div className="text-2xl border-b-2">Liste des étudiants</div>

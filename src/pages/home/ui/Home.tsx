@@ -12,23 +12,14 @@ export const Home: React.FC = () => {
       case "go-to-parcours-list":
         navigate("/parcours")
         break
-      case "create-parcours":
-        navigate("/parcours", { state: { openCreateModal: true } })
-        break
-      case "modifier-parcours":
-        navigate("/parcours", { state: { openModifiyModal: true } })
-        break
       case "go-to-ues":
         navigate("/ues")
         break
-      case "create-ues":
-        navigate("/ues", { state: { openCreateModal: true } })
-        break
+
       default:
         break
     }
   }
-
   return (
     <div className="flex flex-col items-center">
       {/* Barre de recherche rapide */}
